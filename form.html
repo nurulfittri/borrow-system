@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืมอุปกรณ์</title>
+</head>
+<body align="center" bgcolor="#DB7093">
+    <h2>กรอกชื่อเพื่อยืมอุปกรณ์</h2>
+    <input type="text" id="borrower" placeholder="กรอกชื่อของคุณ">
+    <button  onclick="submitForm('borrow')">ยืม</button>
+    <button onclick="submitForm('return')">คืน</button>
+
+    <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function submitForm(action) {
+            const borrower = document.getElementById("borrower").value;
+            const deviceId = getQueryParam("device_id");
+
+            if (!borrower) {
+                alert("กรุณากรอกชื่อ");
+                return;
+            }
+
+            const scriptUrl = "https://script.google.com/macros/s/AKfycby8Z4J7U6dVt5H6CYiBLci3OTv1V7bG-aB1E_7ZvCdgr_Dur9M5DF32lrJcSltJBabe/exec  "; // เปลี่ยนเป็น URL ของ GAS
+            fetch(`${scriptUrl}?device_id=${deviceId}&borrower=${borrower}&action=${action}`)
+                .then(response => response.text())
+                .then(data => {
+                    alert(data === "Success" ? "บันทึกเรียบร้อย" : "เกิดข้อผิดพลาด");
+                    window.location.href = "thankyou.html"; 
+                });
+        }
+    </script>
+</body>
+</html>
